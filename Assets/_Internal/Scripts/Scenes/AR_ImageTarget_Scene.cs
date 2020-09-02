@@ -7,7 +7,7 @@ using static GlobalExtension;
 public class AR_ImageTarget_Scene : MonoBehaviour
 {
     private Logger logger;
-    private MyGameManager gameManager;
+    private SystemController systemController;
     [SerializeField]
     private GameObject landscapeMenu;
     [SerializeField]
@@ -21,8 +21,8 @@ public class AR_ImageTarget_Scene : MonoBehaviour
     private void Awake()
     {
         logger = GameObject.FindObjectOfType<Logger>();
-        gameManager = GameObject.FindObjectOfType<MyGameManager>();
-        gameManager.DeviceOrientationChanged += OnDeviceOrientationChanged;
+        systemController = GameObject.FindObjectOfType<SystemController>();
+        systemController.DeviceOrientationChanged += OnDeviceOrientationChanged;
         car = GameObject.Find("Tocus");
         carAnim = car.GetComponent<Animator>();
     }
@@ -31,7 +31,7 @@ public class AR_ImageTarget_Scene : MonoBehaviour
     {
         if (logger == null)
             throw new NullReferenceException();
-        if (gameManager == null)
+        if (systemController == null)
             throw new NullReferenceException();
         if (landscapeMenu == null)
             throw new NullReferenceException();
@@ -64,19 +64,23 @@ public class AR_ImageTarget_Scene : MonoBehaviour
         carAnim.Play("Run");
     }
 
+    public void GoToMainMenu()
+    {
+        systemController.ChangeScene(Scenes.MAIN_MENU_SCENE);
+    }
 
     void OnDeviceOrientationChanged(object sender, EventArgs e)
     {
-        Log("New device orientation: " + gameManager.CurrentDeviceOrientation);
+        Log("New device orientation: " + systemController.CurrentDeviceOrientation);
 
         //Адаптация меню (отключение одних и подключение других элементов)
-        if (gameManager.CurrentDeviceOrientation == DeviceOrientation.LandscapeLeft |
-            gameManager.CurrentDeviceOrientation == DeviceOrientation.LandscapeRight)
+        if (systemController.CurrentDeviceOrientation == DeviceOrientation.LandscapeLeft |
+            systemController.CurrentDeviceOrientation == DeviceOrientation.LandscapeRight)
         {
             landscapeMenu.SetActive(true);
             portraitMenu.SetActive(false);
         }
-        if (gameManager.CurrentDeviceOrientation == DeviceOrientation.Portrait)
+        if (systemController.CurrentDeviceOrientation == DeviceOrientation.Portrait)
         {
             landscapeMenu.SetActive(false);
             portraitMenu.SetActive(true);

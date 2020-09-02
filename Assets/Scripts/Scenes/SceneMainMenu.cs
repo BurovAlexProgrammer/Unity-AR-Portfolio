@@ -12,9 +12,11 @@ public class SceneMainMenu : MonoBehaviour
     GameObject panelSureQuit;
     [SerializeField]
     GameObject panelExamples;
+    private SystemController systemController;
 
     void Start()
     {
+        systemController = GameObject.Find("Manager").GetComponent<SystemController>();
         panelMainMenu.CheckExist();
         panelSureQuit.CheckExist();
         panelExamples.CheckExist();
@@ -46,5 +48,10 @@ public class SceneMainMenu : MonoBehaviour
         panelSureQuit.SetActive(false);
         panelExamples.SetActive(false);
         panelMainMenu.SetActive(true);
+    }
+
+    public void GoToScene(string scaneName)
+    {
+        systemController.ChangeScene(scaneName);
     }
 }

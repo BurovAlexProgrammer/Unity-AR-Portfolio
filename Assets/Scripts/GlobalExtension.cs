@@ -116,8 +116,12 @@ public static class GlobalExtension
     /// <returns>bool</returns>
     public static bool NotExist(this object obj)
     {
-        var result = (obj as IComponent)?.isDestroyed ?? true;
-        return result;
+        if (obj is IComponent)
+            return (obj as IComponent).isDestroyed;
+        else if (obj is Component)
+            return (obj as Component) == null;
+        else
+            return obj == null;
     }
 
     /// <summary>
