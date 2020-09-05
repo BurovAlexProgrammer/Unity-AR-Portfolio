@@ -193,4 +193,14 @@ public static class GlobalExtension
         transform.eulerAngles = new Vector3(transform.eulerAngles.x, y, transform.eulerAngles.z);
     }
 
+    /// <summary>
+    /// Поворот по оси Y
+    /// </summary>
+    /// <param name="transform"></param>
+    /// <param name="y"></param>
+    public static void AddEulerY(this Transform transform, float y)
+    {
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + y, transform.eulerAngles.z);
+    }
+
 }
