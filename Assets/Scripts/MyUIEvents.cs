@@ -2,11 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static GlobalExtension;
 
-public class MyUIEvents : MonoBehaviour
+public class MyUIEvents : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
+    protected enum UpdateModes { InUpdate, InFixedUpdate }
+    [Tooltip("В каком режыме выполнять")]
+    [SerializeField]
+    UpdateModes updateMode;
+    //Расширенные события мыши
     [SerializeField]
     UnityEvent OnMouseDownEvent;
     [SerializeField]
@@ -14,34 +20,40 @@ public class MyUIEvents : MonoBehaviour
     [SerializeField]
     UnityEvent OnMouseUpEvent;
     private bool isMouseDown = false;
-    void Start()
-    {
-        
-    }
-
     void Update()
     {
-        if (isMouseDown)
-            WhileMouseDown();
+        if (updateMode == UpdateModes.InUpdate)
+            Process();
     }
 
-    private void OnMouseDown()
+    private void FixedUpdate()
     {
-        Log("OnMouseDown");
+        if (updateMode == UpdateModes.InFixedUpdate)
+            Process();
+    }
+
+    void Process()
+    {
+        if (isMouseDown)
+        {
+            WhileMouseDown();
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
         isMouseDown = true;
         OnMouseDownEvent?.Invoke();
     }
 
-    private void OnMouseUp()
+    public void OnPointerUp(PointerEventData eventData)
     {
-        Log("OnMouseUp");
         isMouseDown = false;
         OnMouseUpEvent?.Invoke();
     }
 
     void WhileMouseDown()
     {
-        Log("WhileMouseDown");
         WhileMouseDownEvent?.Invoke();
     }
 }

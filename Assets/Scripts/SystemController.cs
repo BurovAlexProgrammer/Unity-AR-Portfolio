@@ -95,6 +95,14 @@ public class SystemController : MonoBehaviour
     }
 
     /// <summary>
+    /// Выход из игры
+    /// </summary>
+    public void Quit()
+    {
+        QuitGame();
+    }
+
+    /// <summary>
     /// Смена сцены с эффектом затухания
     /// </summary>
     /// <param name="sceneName">Название сцены</param>
