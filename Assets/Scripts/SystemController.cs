@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static GlobalExtension;
@@ -204,4 +205,20 @@ public class SystemController : MonoBehaviour
         pausePanel.SetActive(false);
     }
 
+    IEnumerator TakeScreenShot()
+    {
+        yield return new WaitForEndOfFrame();
+
+        var texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+        texture.Apply();
+
+        NativeGallery.SaveImageToGallery(texture, "Photo from Unity AR", "PhotoAR{0}");
+        Destroy(texture);
+    }
+
+    public void MakeCapture()
+    {
+        StartCoroutine(TakeScreenShot());
+    }
 }
