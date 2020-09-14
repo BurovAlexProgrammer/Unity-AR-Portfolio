@@ -43,6 +43,15 @@ public class SystemController : MonoBehaviour
     }
     public event EventHandler DeviceOrientationChanged;
 
+
+    //Canvas
+    [SerializeField]
+    private GameObject canvas;
+    //Логгер
+    [SerializeField]
+    private Logger logger;
+
+
     void Start()
     {
         LockMouse(false);
@@ -69,6 +78,20 @@ public class SystemController : MonoBehaviour
             CurrentDeviceOrientation = DeviceOrientation.LandscapeLeft;
         else
             CurrentDeviceOrientation = DeviceOrientation.Portrait;
+
+        //Проверяем наличие Canvas на сцене
+        if (canvas.NotExist())
+            Error("Canvas не найден");
+
+        //Проверяем присутствие Логгера на сцене
+        logger = GetComponent<Logger>();
+        if (logger.NotExist()) 
+            Error("Logger не найден");
+    }
+
+    public void WriteLogLine(string message)
+    {
+        logger.WriteLine(message);
     }
 
     private void FixedUpdate()
@@ -205,20 +228,30 @@ public class SystemController : MonoBehaviour
         pausePanel.SetActive(false);
     }
 
-    IEnumerator TakeScreenShot()
+    //Корутина скриншота
+    IEnumerator TakeScreenShot(bool hideCanvas)
     {
         yield return new WaitForEndOfFrame();
-
-        var texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
-        texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-        texture.Apply();
-
-        NativeGallery.SaveImageToGallery(texture, "Photo from Unity AR", "PhotoAR{0}");
-        Destroy(texture);
+        try
+        {
+            var texture = new Texture2D(Screen.width, Screen.height, TextureFormat.RGB24, false);
+            texture.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
+            texture.Apply();
+            WriteLogLine("NativeGallery.CheckPermission: " + NativeGallery.CheckPermission());
+            NativeGallery.SaveImageToGallery(texture, "Photo from Unity AR", "PhotoAR{0}");
+            Destroy(texture);
+            if (hideCanvas) canvas.SetActive(true);
+        } catch (Exception exc)
+        {
+            WriteLogLine(exc.Message);
+        }
     }
 
-    public void MakeCapture()
+    //Скриншот
+    public void MakeCapture(bool hideCanvas = true)
     {
-        StartCoroutine(TakeScreenShot());
+        WriteLogLine("Make Capture");
+        if (hideCanvas) canvas.SetActive(false);
+        StartCoroutine(TakeScreenShot(hideCanvas));
     }
 }

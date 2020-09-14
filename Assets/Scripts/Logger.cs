@@ -17,6 +17,7 @@ public class Logger : MonoBehaviour
         }
     }
 
+
     public void WriteLine(string message)
     {
         text.text = message + Environment.NewLine + text.text;

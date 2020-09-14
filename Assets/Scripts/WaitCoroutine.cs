@@ -7,21 +7,23 @@ using UnityEngine.Events;
 public class WaitCoroutine : MonoBehaviour
 {
     [SerializeField]
-    UnityEvent action;
-    // Start is called before the first frame update
+    UnityEvent actions;
+
     void Start()
     {
-        
+        ExecuteEvents();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 
     public void ExecuteEvents()
     {
-        //StartCoroutine(action);
+        var onEndOfFrame = OnEndOfFrame();
+        StartCoroutine(onEndOfFrame);
+    }
+    
+    private IEnumerator OnEndOfFrame()
+    {
+        yield return new WaitForEndOfFrame();
+        actions?.Invoke();
     }
 }
