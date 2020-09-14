@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: AR_ground
-  m_Shader: {fileID: 45, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 9579f47324da9674e88b7344f5085a06, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -71,6 +71,7 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 0
     - _Parallax: 0.02
+    - _ShadowIntensity: 0.6
     - _SilhouetteSize: -1.23
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

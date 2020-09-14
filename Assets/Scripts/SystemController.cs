@@ -247,7 +247,10 @@ public class SystemController : MonoBehaviour
         }
     }
 
-    //Скриншот
+    /// <summary>
+    /// Скриншот
+    /// </summary>
+    /// <param name="hideCanvas">Скрыть Canvas во время скриншота</param>
     public void MakeCapture(bool hideCanvas = true)
     {
         WriteLogLine("Make Capture");
